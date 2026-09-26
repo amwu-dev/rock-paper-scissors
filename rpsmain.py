@@ -29,7 +29,7 @@ class Main:
 			pygame.display.update()
 
 			pil_string_image = pygame.image.tostring(self.display_surface, "RGBA",False)
-			pil_image = Image.fromstring("RGBA",(660,660),pil_string_image)
+			pil_image = Image.frombytes("RGBA",(256,256),pil_string_image)
 			MATRIX.SetImage(pil_image.convert('RGB'))
 
 if __name__ == '__main__':
@@ -41,6 +41,7 @@ if __name__ == '__main__':
 	options.chain_length = 1
 	options.parallel = 1
 	options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
+	options.disable_hardware_pulsing = True
 
 	MATRIX = RGBMatrix(options = options)
 
