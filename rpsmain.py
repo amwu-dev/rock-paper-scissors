@@ -1,7 +1,7 @@
 from sys import exit
 import pygame
 
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+# from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 
 GRAY = "#1C1C1C"
@@ -44,10 +44,27 @@ class Main:
 
     def draw_text_rps(self):
         draw = ImageDraw.Draw(self.RPS_SELECTION_IMG)
-        font = ImageFont.truetype("impact.ttf", size=5)
-        draw.text((0, ICON_SIZE + ICON_SIZE), "Rock", fill="white",font=font,align ="middle") 
-        draw.text((ICON_SIZE, ICON_SIZE + ICON_SIZE), "Paper",  fill="white",font=font,align ="middle") 
-        draw.text((ICON_SIZE + ICON_SIZE, ICON_SIZE + ICON_SIZE), "Scissors", font=font,fill="white",align ="middle") 
+        font = ImageFont.truetype("impact.ttf", size=13)
+        #draw.text((0, ICON_SIZE + ICON_SIZE), "Rock", fill="white",font=font,align ="middle") 
+        #draw.text((ICON_SIZE, ICON_SIZE + ICON_SIZE), "Paper",  fill="white",font=font,align ="middle") 
+        #draw.text((ICON_SIZE + ICON_SIZE, ICON_SIZE + ICON_SIZE), "Scissors", font=font,fill="white",align ="middle") 
+        draw.text((3, ICON_SIZE + 3), "      WIN TO ", font=font,fill="white",align ="middle") 
+        draw.text((3, ICON_SIZE + 3+13), "GET CANDY!", font=font,fill="white",align ="middle") 
+
+    def draw_victory(self):
+        img = Image.new("RGB", (64, 64))
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype("impact.ttf", size=13)
+        draw.text((3,3), "YOU WON ", font=font,fill="white",align ="middle") 
+        draw.text((3, 3+13), "   CANDY!", font=font,fill="white",align ="middle") 
+        pygame_surface = pygame.image.frombytes(
+            img.tobytes(),
+            img.size,
+            img.mode,
+        )
+        pygame_surface = pygame_surface.convert_alpha()
+
+        return pygame_surface
 
     def draw(self, i):
         self.RPS_SELECTION_IMG = self.BASE_RPS_SELECTION_IMG.copy()
@@ -102,7 +119,7 @@ class Main:
         i = 1
         pygame_surface = self.draw(i)
         self.display_surface.blit(pygame_surface, (0, 0))
-        MATRIX.SetImage(self.RPS_SELECTION_IMG)
+       # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
         while True:
             for event in pygame.event.get():
@@ -119,7 +136,7 @@ class Main:
                                 i = 3
                             pygame_surface = self.draw(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
+                            #MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
                         elif keys[pygame.K_RIGHT]:
                             i += 1
@@ -127,7 +144,7 @@ class Main:
                                 i = 1
                             pygame_surface = self.draw(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
+                            #MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
             pygame.display.update()
             #MATRIX.SetImage(self.RPS_SELECTION_IMG)
@@ -136,14 +153,14 @@ class Main:
 if __name__ == "__main__":
     main = Main()
 
-    options = RGBMatrixOptions()
-    options.rows = 64
-    options.cols = 64
-    options.chain_length = 1
-    options.parallel = 1
-    options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
-    options.disable_hardware_pulsing = True
+    # options = RGBMatrixOptions()
+    # options.rows = 64
+    # options.cols = 64
+    # options.chain_length = 1
+    # options.parallel = 1
+    # options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
+    # options.disable_hardware_pulsing = True
 
-    MATRIX = RGBMatrix(options = options)
+    # MATRIX = RGBMatrix(options = options)
 
     main.run()
