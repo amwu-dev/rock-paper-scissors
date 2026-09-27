@@ -5,7 +5,7 @@ from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 
 GRAY = "#1C1C1C"
-RED = "#05a205"
+GREEN = "#05a205"
 
 WINDOW_WIDTH = 256
 WINDOW_HEIGHT = 256
@@ -38,9 +38,6 @@ class Main:
         cur_x += ICON_SIZE
         self.RPS_SELECTION_IMG.paste(img3, (cur_x, cur_y))
 
-        pygame.joystick.init()
-        joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-        print(joysticks)
         self.draw_text_rps()
         self.OLD_RPS_SELECTION_IMG = self.RPS_SELECTION_IMG.copy()
         self.BASE_RPS_SELECTION_IMG = self.RPS_SELECTION_IMG.copy()
@@ -97,22 +94,43 @@ class Main:
             self.RPS_SELECTION_IMG.mode,
         )
         pygame_surface = pygame_surface.convert_alpha()
+
         return pygame_surface
     
     def run(self):
-        self.display_surface.fill(RED)
+        self.display_surface.fill(GREEN)
         i = 1
+        pygame_surface = self.draw(i)
+        self.display_surface.blit(pygame_surface, (0, 0))
+        MATRIX.SetImage(self.RPS_SELECTION_IMG)
+
         while True:
             for event in pygame.event.get():
+                print(event)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
-            if self.mode == "main_screen":
+                elif self.mode == "main_screen":
+                    keys = pygame.key.get_pressed()
+                    if event.type == pygame.KEYDOWN:
+                        if keys[pygame.K_LEFT]:
+                            i -= 1
+                            if i == 0: 
+                                i = 3
+                            pygame_surface = self.draw(i)
+                            self.display_surface.blit(pygame_surface, (0, 0))
+                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
-                pygame_surface = self.draw(i)
-                self.display_surface.blit(pygame_surface)
+                        elif keys[pygame.K_RIGHT]:
+                            i += 1
+                            if i == 4:
+                                i = 1
+                            pygame_surface = self.draw(i)
+                            self.display_surface.blit(pygame_surface, (0, 0))
+                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
+
             pygame.display.update()
-            MATRIX.SetImage(self.RPS_SELECTION_IMG)
+            #MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
 
 if __name__ == "__main__":
