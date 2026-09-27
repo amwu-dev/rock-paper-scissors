@@ -1,7 +1,7 @@
 from sys import exit
 import pygame
 
-# from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 
 GRAY = "#1C1C1C"
@@ -112,20 +112,20 @@ class Main:
                 pygame_surface = self.draw(i)
                 self.display_surface.blit(pygame_surface)
             pygame.display.update()
-            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
 
 if __name__ == "__main__":
     main = Main()
 
-    # options = RGBMatrixOptions()
-    # options.rows = 64
-    # options.cols = 64
-    # options.chain_length = 1
-    # options.parallel = 1
-    # options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
-    # options.disable_hardware_pulsing = True
+    options = RGBMatrixOptions()
+    options.rows = 64
+    options.cols = 64
+    options.chain_length = 1
+    options.parallel = 1
+    options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
+    options.disable_hardware_pulsing = True
 
-    # MATRIX = RGBMatrix(options = options)
+    MATRIX = RGBMatrix(options = options)
 
     main.run()
