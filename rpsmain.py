@@ -207,7 +207,7 @@ class Main:
             img = self.draw_victory()
         else:
             img = self.draw_loss()
-        MATRIX.SetImg(img)
+        MATRIX.SetImage(img)
         pygame_surface = convert_image(img)
         self.display_surface.blit(pygame_surface, (0, 0))
         return img
