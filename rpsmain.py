@@ -36,9 +36,9 @@ class Main:
         random.seed()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        img1 = Image.open("rock.png")
-        img2 = Image.open("paper.png")
-        img3 = Image.open("scissors.png")
+        img1 = Image.open("Arock.png")
+        img2 = Image.open("Apaper.png")
+        img3 = Image.open("Ascissors.png")
 
         self.RPS_SELECTION_IMG = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
 
