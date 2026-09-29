@@ -5,6 +5,7 @@ import pygame
 from PIL import Image, ImageDraw, ImageFont
 
 import random
+
 GRAY = "#1C1C1C"
 GREEN = "#05a205"
 
@@ -17,15 +18,17 @@ ICON_SIZE = 16
 
 MATRIX = None
 
+
 # Converts a PIL image to Pygame surface
 def convert_image(img):
     pygame_surface = pygame.image.frombytes(
-                    img.tobytes(),
-                    img.size,
-                    img.mode,
-                )
+        img.tobytes(),
+        img.size,
+        img.mode,
+    )
     pygame_surface = pygame_surface.convert_alpha()
     return pygame_surface
+
 
 class Main:
     def __init__(self):
@@ -39,12 +42,11 @@ class Main:
 
         self.RPS_SELECTION_IMG = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
 
-
         self.mode = "main_screen"
         cur_x = EDGE_PADDING
         cur_y = EDGE_PADDING
-        self.rps_map = {1:"rock", 2:"scissors", 3:"paper"}
-        self.rps_img_map = {1: img1, 2: img2, 3:img3}
+        self.rps_map = {1: "rock", 2: "paper", 3: "scissors"}
+        self.rps_img_map = {1: img1, 2: img2, 3: img3}
 
         self.RPS_SELECTION_IMG.paste(img1, (cur_x, cur_y))
         cur_x += ICON_SIZE
@@ -60,41 +62,50 @@ class Main:
     def draw_text_rps(self):
         draw = ImageDraw.Draw(self.RPS_SELECTION_IMG)
         font = ImageFont.truetype("impact.ttf", size=13)
-        #draw.text((0, ICON_SIZE + ICON_SIZE), "Rock", fill="white",font=font,align ="middle") 
-        #draw.text((ICON_SIZE, ICON_SIZE + ICON_SIZE), "Paper",  fill="white",font=font,align ="middle") 
-        #draw.text((ICON_SIZE + ICON_SIZE, ICON_SIZE + ICON_SIZE), "Scissors", font=font,fill="white",align ="middle") 
-        draw.text((3, ICON_SIZE + 3), "      WIN TO ", font=font,fill="white",align ="middle") 
-        draw.text((3, ICON_SIZE + 3+13), "GET CANDY!", font=font,fill="white",align ="middle") 
+        # draw.text((0, ICON_SIZE + ICON_SIZE), "Rock", fill="white",font=font,align ="middle")
+        # draw.text((ICON_SIZE, ICON_SIZE + ICON_SIZE), "Paper",  fill="white",font=font,align ="middle")
+        # draw.text((ICON_SIZE + ICON_SIZE, ICON_SIZE + ICON_SIZE), "Scissors", font=font,fill="white",align ="middle")
+        draw.text(
+            (3, ICON_SIZE + 3), "      WIN TO ", font=font, fill="white", align="middle"
+        )
+        draw.text(
+            (3, ICON_SIZE + 3 + 13),
+            "GET CANDY!",
+            font=font,
+            fill="white",
+            align="middle",
+        )
 
     # Victory Screen
     def draw_victory(self):
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("impact.ttf", size=13)
-        draw.text((3,3), "YOU WON ", font=font,fill="white",align ="middle") 
-        draw.text((3, 3+13), "   CANDY!", font=font,fill="white",align ="middle") 
-        #MATRIX.SetImage(self.RPS_SELECTION_IMG)
+        draw.text((3, 3), "YOU WON ", font=font, fill="white", align="middle")
+        draw.text((3, 3 + 13), "   CANDY!", font=font, fill="white", align="middle")
+        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
-        return convert_image(img)
-    
+        return img
+
     # Tie screen
     def draw_tie(self):
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("impact.ttf", size=13)
-        draw.text((12,12), "YOU TIED", font=font,fill="white",align ="middle") 
-        #MATRIX.SetImage(self.RPS_SELECTION_IMG)
+        draw.text((12, 12), "YOU TIED", font=font, fill="white", align="middle")
+        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
-        return convert_image(img)
+        return img
+
     # Loss screen
     def draw_loss(self):
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("impact.ttf", size=13)
-        draw.text((12,12), ":(", font=font,fill="white",align ="middle") 
-        #MATRIX.SetImage(self.RPS_SELECTION_IMG)
+        draw.text((12, 12), ":(", font=font, fill="white", align="middle")
+        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
-        return convert_image(img)
+        return img
 
     # Draws boxes around the rock-paper-scissors selection
     def draw_box(self, i):
@@ -102,7 +113,7 @@ class Main:
         self.RPS_SELECTION_IMG_DRAW = ImageDraw.Draw(self.RPS_SELECTION_IMG)
         self.RPS_SELECTION_IMG_DRAW.line(
             [
-                (ICON_SIZE * (i - 1),0),
+                (ICON_SIZE * (i - 1), 0),
                 (ICON_SIZE * i, 0),
             ],
             fill="white",
@@ -119,37 +130,47 @@ class Main:
             joint="curve",
         )  # vertical right
         self.RPS_SELECTION_IMG_DRAW.line(
-            [
-                (ICON_SIZE * (i - 1), ICON_SIZE), 
-                (ICON_SIZE * (i), ICON_SIZE)
-            ],
+            [(ICON_SIZE * (i - 1), ICON_SIZE), (ICON_SIZE * (i), ICON_SIZE)],
             fill="white",
             width=3,
             joint="curve",
         )  # Horizontal bottom
         self.RPS_SELECTION_IMG_DRAW.line(
             [
-                (ICON_SIZE * (i-1), 0),
-                (ICON_SIZE * (i-1), ICON_SIZE),
+                (ICON_SIZE * (i - 1), 0),
+                (ICON_SIZE * (i - 1), ICON_SIZE),
             ],
             fill="white",
             width=3,
             joint="curve",
         )  # vertical left
-    
+
         return convert_image(self.RPS_SELECTION_IMG)
 
     # player versus AI
     def versus(self, player_selection):
         player1 = player_selection
-        player2 = 1
+        player2 = random.randint(1, 3)
+        player1_selection = self.rps_map[player1]
+        player2_selection = self.rps_map[player2]
+        winner = 1
+        tie = False
+        if player1_selection == player2_selection:
+            tie = True
+        elif (
+            (player1_selection == "rock" and player2_selection == "scissors")
+            or (player1_selection == "paper" and player2_selection == "rock")
+            or (player1_selection == "scissors" and player2_selection == "paper")
+        ):
+            winner = 0
         # --------------------- AI selection animation -----------------
         old_time = pygame.time.get_ticks()
         new_time = old_time
 
         background = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
+        background.paste(self.rps_img_map[player1], (ICON_SIZE, 17))
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
-        x = ICON_SIZE + ICON_SIZE # try and hit 1/3
+        x = ICON_SIZE + ICON_SIZE  # try and hit 1/3
         j = 0
         while new_time - old_time < 1200:
             j += 1
@@ -160,29 +181,64 @@ class Main:
             img = background.copy()
             img.paste(self.rps_img_map[j % 3 + 1], (x, 17))
             pygame.display.update()
+        j = 1
+        while j <= 3:
+            pygame.time.wait(144)
+            new_time = pygame.time.get_ticks()
+            pygame_surface = convert_image(img)
+            self.display_surface.blit(pygame_surface, (0, 0))
+            img = background.copy()
+            selection = j % 3 + 1
+            img.paste(self.rps_img_map[selection], (x, 17))
+            pygame.display.update()
+            j += 1
+            if selection == player2_selection:
+                break
         # --------------------- floating animation ---------------------
-        img = self.floating_animation(self.rps_img_map[player1], self.rps_img_map[player2], winner=1, tie=True)
+        img = self.floating_animation(
+            self.rps_img_map[player1], self.rps_img_map[player2], winner=winner, tie=tie
+        )
         # --------------------------------------------------------------
-        return convert_image(img)
+        if tie:
+            img = self.draw_tie()
+        elif winner == 0:
+            img = self.draw_victory()
+        else:
+            img = self.draw_loss()
+        
+        pygame_surface = convert_image(img)
+        self.display_surface.blit(pygame_surface, (0, 0))
+        return img
+
 
     # The animation for each victorious player
     # A floating rock, paper, or scissor for who is victorious or if it was a tie, both float slowly
-    def floating_animation(self, img1, img2, winner=0, tie=False,coor1 = (ICON_SIZE, 17), coor2 = (ICON_SIZE + ICON_SIZE, 17), t=1200):
+    def floating_animation(
+        self,
+        img1,
+        img2,
+        winner=0,
+        tie=False,
+        coor1=(ICON_SIZE, 17),
+        coor2=(ICON_SIZE + ICON_SIZE, 17),
+        t=1200,
+    ):
         old_time = pygame.time.get_ticks()
         new_time = old_time
-        #background = img.copy()
+        # background = img.copy()
         background = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
-        x, y = coor1 # try and hit 1/3
+        x, y = coor1  # try and hit 1/3
         w, z = coor2
+
         while new_time - old_time < t:
             if y > 0:
                 if tie:
                     y -= 1
-                    z -=1
+                    z -= 1
                 elif winner == 0:
                     y -= 1
-                elif winner == 1:
+                else:
                     z -= 1
             img.paste(img1, (x, y))
             img.paste(img2, (w, z))
@@ -200,11 +256,10 @@ class Main:
         i = 1
         pygame_surface = self.draw_box(i)
         self.display_surface.blit(pygame_surface, (0, 0))
-       # MATRIX.SetImage(self.RPS_SELECTION_IMG)
-
+        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+        end = False
         while True:
             for event in pygame.event.get():
-                print(event)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
@@ -213,24 +268,28 @@ class Main:
                     if event.type == pygame.KEYDOWN:
                         if keys[pygame.K_LEFT]:
                             i -= 1
-                            if i == 0: 
+                            if i == 0:
                                 i = 3
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                            #MATRIX.SetImage(self.RPS_SELECTION_IMG)
-
+                            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+                            end = False
                         elif keys[pygame.K_RIGHT]:
                             i += 1
                             if i == 4:
                                 i = 1
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                        elif keys[pygame.K_SPACE]:
+                            end = False
+                        elif keys[pygame.K_SPACE] and not end:
                             pygame_surface = self.versus(i)
-                            #MATRIX.SetImage(self.RPS_SELECTION_IMG)
+                            end = True
+                            pygame.event.clear()
+
+                            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
             pygame.display.update()
-            #MATRIX.SetImage(self.RPS_SELECTION_IMG)
+            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
 
 if __name__ == "__main__":
