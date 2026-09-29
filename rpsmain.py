@@ -303,8 +303,9 @@ if __name__ == "__main__":
     options.parallel = 1
     options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
     options.disable_hardware_pulsing = True
-    options.pwm_bits = 5
+    options.pwm_bits = 3
     options.gpio_slowdown = 5
+    options.limit_refresh_rate_hz = 144
     MATRIX = RGBMatrix(options = options)
 
     main.run()
