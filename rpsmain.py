@@ -288,7 +288,6 @@ class Main:
                             end = True
                             pygame.event.clear()
 
-                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
             pygame.display.update()
 
