@@ -36,12 +36,12 @@ class Main:
         random.seed()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        img1 = Image.open("ARock.png")
-        img2 = Image.open("APaper.png")
-        img3 = Image.open("AScissors.png")
-        img1.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
-        img2.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
-        img3.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
+        img1 = Image.open("resized-images/ARock.png")
+        img2 = Image.open("resized-images/APaper.png")
+        img3 = Image.open("resized-images/AScissors.png")
+        #img1.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
+        #img2.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
+        #img3.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
 
         self.RPS_SELECTION_IMG = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
 
