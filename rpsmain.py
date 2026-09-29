@@ -13,8 +13,8 @@ WINDOW_WIDTH = 256
 WINDOW_HEIGHT = 256
 
 PICTURE_SIZE = 64
-EDGE_PADDING = 2
-ICON_SIZE = 16
+EDGE_PADDING = 0
+ICON_SIZE = 20
 
 MATRIX = None
 
@@ -39,6 +39,9 @@ class Main:
         img1 = Image.open("ARock.png")
         img2 = Image.open("APaper.png")
         img3 = Image.open("AScissors.png")
+        img1.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
+        img2.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
+        img3.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
 
         self.RPS_SELECTION_IMG = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
 
@@ -83,7 +86,6 @@ class Main:
         font = ImageFont.truetype("impact.ttf", size=13)
         draw.text((3, 3), "YOU WON ", font=font, fill="white", align="middle")
         draw.text((3, 3 + 13), "   CANDY!", font=font, fill="white", align="middle")
-        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
         return img
 
@@ -93,7 +95,6 @@ class Main:
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("impact.ttf", size=13)
         draw.text((12, 12), "YOU TIED", font=font, fill="white", align="middle")
-        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
         return img
 
@@ -103,7 +104,6 @@ class Main:
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("impact.ttf", size=13)
         draw.text((12, 12), ":(", font=font, fill="white", align="middle")
-        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
         return img
 
@@ -168,9 +168,9 @@ class Main:
         new_time = old_time
 
         background = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
-        background.paste(self.rps_img_map[player1], (ICON_SIZE, 17))
+        background.paste(self.rps_img_map[player1], (12, 12))
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
-        x = ICON_SIZE + ICON_SIZE  # try and hit 1/3
+        x = 12 + ICON_SIZE  # try and hit 1/3
         j = 0
         while new_time - old_time < 1200:
             j += 1
@@ -180,7 +180,7 @@ class Main:
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
-            img.paste(self.rps_img_map[j % 3 + 1], (x, 17))
+            img.paste(self.rps_img_map[j % 3 + 1], (x, 12))
             pygame.display.update()
         j = 1
         while j <= 3:
@@ -191,7 +191,7 @@ class Main:
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
             selection = j % 3 + 1
-            img.paste(self.rps_img_map[selection], (x, 17))
+            img.paste(self.rps_img_map[selection], (x, 12))
             pygame.display.update()
             j += 1
             if selection == player2_selection:
@@ -221,8 +221,8 @@ class Main:
         img2,
         winner=0,
         tie=False,
-        coor1=(ICON_SIZE, 17),
-        coor2=(ICON_SIZE + ICON_SIZE, 17),
+        coor1=(12, 12),
+        coor2=(12 + ICON_SIZE, 12),
         t=1200,
     ):
         old_time = pygame.time.get_ticks()
@@ -288,7 +288,7 @@ class Main:
                             end = True
                             pygame.event.clear()
 
-                            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
             pygame.display.update()
 
