@@ -13,8 +13,9 @@ WINDOW_WIDTH = 256
 WINDOW_HEIGHT = 256
 
 PICTURE_SIZE = 64
-EDGE_PADDING = 0
-ICON_SIZE = 20
+EDGE_PADDING = 3
+ICON_SIZE = 28
+MIDDLE_PADDING = 18
 
 MATRIX = None
 
@@ -36,9 +37,9 @@ class Main:
         random.seed()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        img1 = Image.open("resized-images/ARock.png")
-        img2 = Image.open("resized-images/APaper.png")
-        img3 = Image.open("resized-images/AScissors.png")
+        img1 = Image.open("ARock.png")
+        img2 = Image.open("APaper.png")
+        img3 = Image.open("AScissors.png")
         #img1.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
         #img2.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
         #img3.thumbnail((ICON_SIZE, ICON_SIZE), Image.Resampling.LANCZOS)
@@ -46,24 +47,25 @@ class Main:
         self.RPS_SELECTION_IMG = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
 
         self.mode = "main_screen"
-        cur_x = EDGE_PADDING
-        cur_y = EDGE_PADDING
+        cur_x = 0
+        cur_y = 0
         self.rps_map = {1: "rock", 2: "paper", 3: "scissors"}
         self.rps_img_map = {1: img1, 2: img2, 3: img3}
 
-        self.RPS_SELECTION_IMG.paste(img1, (cur_x, cur_y))
+        self.RPS_SELECTION_IMG.paste(img1, (MIDDLE_PADDING, cur_y))
+        cur_y += ICON_SIZE
+        self.RPS_SELECTION_IMG.paste(img2, (cur_x + EDGE_PADDING, cur_y))
         cur_x += ICON_SIZE
-        self.RPS_SELECTION_IMG.paste(img2, (cur_x, cur_y))
-        cur_x += ICON_SIZE
-        self.RPS_SELECTION_IMG.paste(img3, (cur_x, cur_y))
+        self.RPS_SELECTION_IMG.paste(img3, (cur_x + EDGE_PADDING, cur_y))
 
-        self.draw_text_rps()
+        #self.draw_text_rps()
         self.OLD_RPS_SELECTION_IMG = self.RPS_SELECTION_IMG.copy()
         self.BASE_RPS_SELECTION_IMG = self.RPS_SELECTION_IMG.copy()
 
     # Draws text at bottom of selection screen
     def draw_text_rps(self):
-        draw = ImageDraw.Draw(self.RPS_SELECTION_IMG)
+        img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
+        draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("impact.ttf", size=13)
         # draw.text((0, ICON_SIZE + ICON_SIZE), "Rock", fill="white",font=font,align ="middle")
         # draw.text((ICON_SIZE, ICON_SIZE + ICON_SIZE), "Paper",  fill="white",font=font,align ="middle")
@@ -78,6 +80,7 @@ class Main:
             fill="white",
             align="middle",
         )
+        return convert_image(img)
 
     # Victory Screen
     def draw_victory(self):
@@ -107,45 +110,31 @@ class Main:
 
         return img
 
-    # Draws boxes around the rock-paper-scissors selection
+    # # Draws boxes around the rock-paper-scissors selection
     def draw_box(self, i):
         self.RPS_SELECTION_IMG = self.BASE_RPS_SELECTION_IMG.copy()
         self.RPS_SELECTION_IMG_DRAW = ImageDraw.Draw(self.RPS_SELECTION_IMG)
-        self.RPS_SELECTION_IMG_DRAW.line(
+
+        box_coordinates = {
+            1: (MIDDLE_PADDING, 0),
+            2: (EDGE_PADDING,  ICON_SIZE),
+            3: (ICON_SIZE + EDGE_PADDING, ICON_SIZE),
+        }
+
+        x, y = box_coordinates[i]
+
+
+        self.RPS_SELECTION_IMG_DRAW.rectangle(
             [
-                (ICON_SIZE * (i - 1), 0),
-                (ICON_SIZE * i, 0),
+                (x, y),
+                (x + ICON_SIZE, y + ICON_SIZE),
             ],
-            fill="white",
+            outline="white",
             width=3,
-            joint="curve",
-        )  # Horizontal top
-        self.RPS_SELECTION_IMG_DRAW.line(
-            [
-                (ICON_SIZE * i, 0),
-                (ICON_SIZE * i, ICON_SIZE),
-            ],
-            fill="white",
-            width=3,
-            joint="curve",
-        )  # vertical right
-        self.RPS_SELECTION_IMG_DRAW.line(
-            [(ICON_SIZE * (i - 1), ICON_SIZE), (ICON_SIZE * (i), ICON_SIZE)],
-            fill="white",
-            width=3,
-            joint="curve",
-        )  # Horizontal bottom
-        self.RPS_SELECTION_IMG_DRAW.line(
-            [
-                (ICON_SIZE * (i - 1), 0),
-                (ICON_SIZE * (i - 1), ICON_SIZE),
-            ],
-            fill="white",
-            width=3,
-            joint="curve",
-        )  # vertical left
+        )
         MATRIX.SetImage(self.RPS_SELECTION_IMG)
         return convert_image(self.RPS_SELECTION_IMG)
+
 
     # player versus AI
     def versus(self, player_selection):
@@ -168,9 +157,9 @@ class Main:
         new_time = old_time
 
         background = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
-        background.paste(self.rps_img_map[player1], (12, 12))
+        background.paste(self.rps_img_map[player1], (EDGE_PADDING, 12))
         img = Image.new("RGB", (PICTURE_SIZE, PICTURE_SIZE))
-        x = 12 + ICON_SIZE  # try and hit 1/3
+        x = EDGE_PADDING+ ICON_SIZE  # try and hit 1/3
         j = 0
         while new_time - old_time < 1200:
             j += 1
@@ -221,8 +210,8 @@ class Main:
         img2,
         winner=0,
         tie=False,
-        coor1=(12, 12),
-        coor2=(12 + ICON_SIZE, 12),
+        coor1=(EDGE_PADDING, 12),
+        coor2=(EDGE_PADDING + ICON_SIZE, 12),
         t=1200,
     ):
         old_time = pygame.time.get_ticks()
@@ -260,11 +249,21 @@ class Main:
         pygame_surface = self.draw_box(i)
         self.display_surface.blit(pygame_surface, (0, 0))
         end = False
+        self.mode = "entrance"
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
+                elif self.mode == "entrance":
+                    keys = pygame.key.get_pressed()
+                    
+                    pygame_surface = self.draw_text_rps()
+                    self.display_surface.blit(pygame_surface, (0, 0))
+                    if event.type == pygame.KEYDOWN and (keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]):
+                        self.mode = "main_screen"
+                        pygame_surface = self.draw_box(i)
+                        self.display_surface.blit(pygame_surface, (0, 0))
                 elif self.mode == "main_screen":
                     keys = pygame.key.get_pressed()
                     if event.type == pygame.KEYDOWN:
@@ -287,6 +286,9 @@ class Main:
                             pygame_surface = self.versus(i)
                             end = True
                             pygame.event.clear()
+                        elif keys[pygame.K_ESCAPE]:
+                            end = True
+                            self.mode = "entrance"
 
 
             pygame.display.update()
