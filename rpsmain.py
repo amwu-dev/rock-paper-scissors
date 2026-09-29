@@ -144,7 +144,7 @@ class Main:
             width=3,
             joint="curve",
         )  # vertical left
-
+        MATRIX.SetImage(self.RPS_SELECTION_IMG)
         return convert_image(self.RPS_SELECTION_IMG)
 
     # player versus AI
@@ -259,7 +259,6 @@ class Main:
         i = 1
         pygame_surface = self.draw_box(i)
         self.display_surface.blit(pygame_surface, (0, 0))
-        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
         end = False
         while True:
             for event in pygame.event.get():
@@ -275,7 +274,6 @@ class Main:
                                 i = 3
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
                             end = False
                         elif keys[pygame.K_RIGHT]:
                             i += 1
@@ -283,7 +281,6 @@ class Main:
                                 i = 1
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
                             end = False
                         elif keys[pygame.K_SPACE] and not end:
@@ -294,7 +291,6 @@ class Main:
                             # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
             pygame.display.update()
-            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
 
 if __name__ == "__main__":
