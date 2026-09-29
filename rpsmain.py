@@ -1,7 +1,7 @@
 from sys import exit
 import pygame
 
-# from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 
 import random
@@ -176,6 +176,7 @@ class Main:
             j += 1
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
+            MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -185,6 +186,7 @@ class Main:
         while j <= 3:
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
+            MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -205,7 +207,7 @@ class Main:
             img = self.draw_victory()
         else:
             img = self.draw_loss()
-        
+        MATRIX.SetImg(img)
         pygame_surface = convert_image(img)
         self.display_surface.blit(pygame_surface, (0, 0))
         return img
@@ -244,6 +246,7 @@ class Main:
             img.paste(img2, (w, z))
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
+            MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -272,7 +275,7 @@ class Main:
                                 i = 3
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
-                            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
                             end = False
                         elif keys[pygame.K_RIGHT]:
                             i += 1
@@ -280,6 +283,8 @@ class Main:
                                 i = 1
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
+                            MATRIX.SetImage(self.RPS_SELECTION_IMG)
+
                             end = False
                         elif keys[pygame.K_SPACE] and not end:
                             pygame_surface = self.versus(i)
@@ -289,20 +294,20 @@ class Main:
                             # MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
             pygame.display.update()
-            # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+            MATRIX.SetImage(self.RPS_SELECTION_IMG)
 
 
 if __name__ == "__main__":
     main = Main()
 
-    # options = RGBMatrixOptions()
-    # options.rows = 64
-    # options.cols = 64
-    # options.chain_length = 1
-    # options.parallel = 1
-    # options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
-    # options.disable_hardware_pulsing = True
+    options = RGBMatrixOptions()
+    options.rows = 64
+    options.cols = 64
+    options.chain_length = 1
+    options.parallel = 1
+    options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
+    options.disable_hardware_pulsing = True
 
-    # MATRIX = RGBMatrix(options = options)
+    MATRIX = RGBMatrix(options = options)
 
     main.run()
