@@ -1,7 +1,7 @@
 from sys import exit
 import pygame
 
-# from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 
 import random
@@ -37,14 +37,9 @@ class Main:
     def __init__(self):
         pygame.init()
         pygame.joystick.init()
-        joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
-        print(f"Detected {len(joysticks)} joystick(s): {[j.get_name() for j in joysticks]}")
+        #joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+        #print(f"Detected {len(joysticks)} joystick(s): {[j.get_name() for j in joysticks]}")
 
-                # For each joystick:
-        buttons = joysticks[0].get_numbuttons()
-        for i in range(buttons):
-            button = joysticks[0].get_button(i)
-            print(f"Button {i}: {button}")
 
         random.seed()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -73,6 +68,8 @@ class Main:
         # self.draw_text_rps()
         self.OLD_RPS_SELECTION_IMG = self.RPS_SELECTION_IMG.copy()
         self.BASE_RPS_SELECTION_IMG = self.RPS_SELECTION_IMG.copy()
+        self.bitdokeys = {"left": pygame.K_e, "right": pygame.K_f, "select": pygame.K_n, "a":pygame.K_g, "b":pygame.K_j
+                          , "up":pygame.K_c, "down":pygame.K_d}
 
     # Draws text at bottom of selection screen
     def draw_text_rps(self):
@@ -183,7 +180,7 @@ class Main:
             outline="white",
             width=3,
         )
-        # MATRIX.SetImage(self.RPS_SELECTION_IMG)
+        MATRIX.SetImage(self.RPS_SELECTION_IMG)
         return convert_image(self.RPS_SELECTION_IMG)
 
     # player versus AI
@@ -215,7 +212,7 @@ class Main:
             j += 1
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
-            # MATRIX.SetImage(img)
+            MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -225,7 +222,7 @@ class Main:
         while j <= 3:
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
-            # MATRIX.SetImage(img)
+            MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -246,7 +243,7 @@ class Main:
             img = self.draw_victory()
         else:
             img = self.draw_loss()
-        # MATRIX.SetImage(img)
+        MATRIX.SetImage(img)
         pygame_surface = convert_image(img)
         self.display_surface.blit(pygame_surface, (0, 0))
         return img
@@ -284,7 +281,7 @@ class Main:
             img.paste(img2, (w, z))
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
-            # MATRIX.SetImage(img)
+            MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -311,7 +308,10 @@ class Main:
                     pygame_surface = self.draw_text_rps()
                     self.display_surface.blit(pygame_surface, (0, 0))
                     if event.type == pygame.KEYDOWN and (
-                        keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]
+                        keys[pygame.K_RIGHT] or keys[pygame.K_LEFT] or
+                        keys[self.bitdokeys["left"]] or keys[self.bitdokeys["right"]] or
+                        keys[self.bitdokeys["up"]] or keys[self.bitdokeys["down"]] or
+                        keys[pygame.K_SPACE] or keys[self.bitdokeys["a"]]
                     ):
                         self.mode = "main_screen"
                         pygame_surface = self.draw_box(i)
@@ -319,14 +319,14 @@ class Main:
                 elif self.mode == "main_screen":
                     keys = pygame.key.get_pressed()
                     if event.type == pygame.KEYDOWN:
-                        if keys[pygame.K_LEFT]:
+                        if keys[pygame.K_LEFT] or keys[self.bitdokeys["left"]]:
                             i -= 1
                             if i == 0:
                                 i = 3
                             pygame_surface = self.draw_box(i)
                             self.display_surface.blit(pygame_surface, (0, 0))
                             end = False
-                        elif keys[pygame.K_RIGHT]:
+                        elif keys[pygame.K_RIGHT] or keys[self.bitdokeys["right"]]:
                             i += 1
                             if i == 4:
                                 i = 1
@@ -334,11 +334,27 @@ class Main:
                             self.display_surface.blit(pygame_surface, (0, 0))
 
                             end = False
-                        elif keys[pygame.K_SPACE] and not end:
+                        elif keys[pygame.K_UP] or keys[self.bitdokeys["up"]]:
+                            if i == 2 or i == 3:
+                                i = 1
+                            elif i == 1:
+                                i = 2
+                            pygame_surface = self.draw_box(i)
+                            self.display_surface.blit(pygame_surface, (0, 0))
+                        elif keys[pygame.K_DOWN] or keys[self.bitdokeys["down"]]:
+                            if i == 1:
+                                i = 2
+                            elif i == 2 or i == 3:
+                                i = 1
+                            pygame_surface = self.draw_box(i)
+                            self.display_surface.blit(pygame_surface, (0, 0))
+
+                            end = False
+                        elif (keys[pygame.K_SPACE] or keys[self.bitdokeys["a"]]) and not end:
                             pygame_surface = self.versus(i)
                             end = True
                             pygame.event.clear()
-                        elif keys[pygame.K_ESCAPE]:
+                        elif keys[pygame.K_ESCAPE] or keys[self.bitdokeys["select"]]:
                             end = True
                             self.mode = "entrance"
 
@@ -348,16 +364,16 @@ class Main:
 if __name__ == "__main__":
     main = Main()
 
-    # options = RGBMatrixOptions()
-    # options.rows = 64
-    # options.cols = 64
-    # options.chain_length = 1
-    # options.parallel = 1
-    # options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
-    # options.disable_hardware_pulsing = True
-    # options.pwm_bits = 3
-    # options.gpio_slowdown = 5
-    # options.limit_refresh_rate_hz = 144
-    # MATRIX = RGBMatrix(options = options)
+    options = RGBMatrixOptions()
+    options.rows = 64
+    options.cols = 64
+    options.chain_length = 1
+    options.parallel = 1
+    options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
+    options.disable_hardware_pulsing = True
+    options.pwm_bits = 3
+    options.gpio_slowdown = 5
+    options.limit_refresh_rate_hz = 144
+    MATRIX = RGBMatrix(options = options)
 
     main.run()
