@@ -1,7 +1,7 @@
 from sys import exit
 import pygame
 
-from rgbmatrix import RGBMatrix, RGBMatrixOptions
+#from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
 
 import random
@@ -180,7 +180,7 @@ class Main:
             outline="white",
             width=3,
         )
-        MATRIX.SetImage(self.RPS_SELECTION_IMG)
+        #MATRIX.SetImage(self.RPS_SELECTION_IMG)
         return convert_image(self.RPS_SELECTION_IMG)
 
     # player versus AI
@@ -212,7 +212,7 @@ class Main:
             j += 1
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
-            MATRIX.SetImage(img)
+            #MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -222,7 +222,7 @@ class Main:
         while j <= 3:
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
-            MATRIX.SetImage(img)
+            #MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -243,7 +243,7 @@ class Main:
             img = self.draw_victory()
         else:
             img = self.draw_loss()
-        MATRIX.SetImage(img)
+        #MATRIX.SetImage(img)
         pygame_surface = convert_image(img)
         self.display_surface.blit(pygame_surface, (0, 0))
         return img
@@ -281,7 +281,7 @@ class Main:
             img.paste(img2, (w, z))
             pygame.time.wait(144)
             new_time = pygame.time.get_ticks()
-            MATRIX.SetImage(img)
+            #MATRIX.SetImage(img)
             pygame_surface = convert_image(img)
             self.display_surface.blit(pygame_surface, (0, 0))
             img = background.copy()
@@ -364,16 +364,16 @@ class Main:
 if __name__ == "__main__":
     main = Main()
 
-    options = RGBMatrixOptions()
-    options.rows = 64
-    options.cols = 64
-    options.chain_length = 1
-    options.parallel = 1
-    options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
-    options.disable_hardware_pulsing = True
-    options.pwm_bits = 3
-    options.gpio_slowdown = 5
-    options.limit_refresh_rate_hz = 144
-    MATRIX = RGBMatrix(options = options)
+    # options = RGBMatrixOptions()
+    # options.rows = 64
+    # options.cols = 64
+    # options.chain_length = 1
+    # options.parallel = 1
+    # options.hardware_mapping = 'adafruit-hat-pwm'  # If you have an Adafruit HAT: 'adafruit-hat'
+    # options.disable_hardware_pulsing = True
+    # options.pwm_bits = 3
+    # options.gpio_slowdown = 5
+    # options.limit_refresh_rate_hz = 144
+    # MATRIX = RGBMatrix(options = options)
 
     main.run()
